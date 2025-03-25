@@ -3,8 +3,12 @@ name: test-pr-action
 on:
   workflow_dispatch: # for manual testing
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
-  weekly-release-pr:
+  create-pr:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,3 +27,4 @@ jobs:
           commit-message: wip!
           branch: test-branch
           base: main
+          labels: kind/automation
