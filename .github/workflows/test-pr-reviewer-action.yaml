@@ -1,0 +1,39 @@
+name: test-pr-reviewer-action
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  review-pr:
+    runs-on: ubuntu-latest
+
+    if: ${{ ! github.event.pull_request.head.repo.fork && github.event.pull_request.user.login == 'narqo' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Approve and auto-merge
+        id: auto-merge
+        if: startsWith(github.event.pull_request.head.ref, 'test-branch-')
+        run: |
+          gh pr merge --auto --squash "$PR_URL"
+          gh pr review $PR_URL \
+          --approve -b "**I'm approving** this pull request, because I can."
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Manual review is required
+        if: steps.auto-merge.conclusion != 'success'
+        run: |
+          gh pr comment $PR_URL --body "**This PR requires manual review.**"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
