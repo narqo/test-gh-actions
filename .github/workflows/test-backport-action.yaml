@@ -1,7 +1,7 @@
 name: test-backport-action
 
 on:
-  pull_request:
+  pull_request_target:
     types:
       - closed
       - labeled
@@ -13,6 +13,9 @@ permissions:
 jobs:
   main:
     runs-on: ubuntu-latest
+
+    # Only run if the PR is labeled with 'backport xxx'.
+    if: ${{ contains(format('||{0}', join(github.event.pull_request.labels.*.name, '||')), '||backport ') }}
 
     steps:
       - name: Checkout grafana-github-actions
@@ -28,6 +31,8 @@ jobs:
         run: npm install --production --prefix ./actions
 
       - name: Run backport
+        id: backport
+        #if: ${{ ! github.event.pull_request.head.repo.fork }}
         uses: ./actions/backport
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
