@@ -14,8 +14,8 @@ jobs:
   main:
     runs-on: ubuntu-latest
 
-    # Only run if the PR is labeled with 'backport xxx'.
-    if: ${{ contains(format('||{0}', join(github.event.pull_request.labels.*.name, '||')), '||backport ') }}
+    # Only run if the PR is merged and labeled with 'backport xxx'.
+    if: ${{ github.event.pull_request.merged == true && contains(format('||{0}', join(github.event.pull_request.labels.*.name, '||')), '||backport ') }}
 
     steps:
       - name: Checkout grafana-github-actions
