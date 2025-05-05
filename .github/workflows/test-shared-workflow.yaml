@@ -1,4 +1,4 @@
-name: Test Shared Workflow
+name: test-shared-workflow
 
 on:
   workflow_dispatch: # for manual testing
@@ -7,4 +7,8 @@ jobs:
   test-job:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/test-action.yaml
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/shared/actions/test-action.yaml
