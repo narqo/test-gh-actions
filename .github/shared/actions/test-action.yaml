@@ -1,6 +1,7 @@
 name: test-shared-action
 
 runs:
+  using: composite
   steps:
     - id: gen-secrets
       outputs:
