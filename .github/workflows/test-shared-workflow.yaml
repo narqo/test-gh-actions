@@ -11,4 +11,4 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: ./.github/shared/actions/test-action.yaml
+      - uses: ./.github/shared/actions/test-action
