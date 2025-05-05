@@ -1,0 +1,10 @@
+name: Test Shared Workflow
+
+on:
+  workflow_dispatch: # for manual testing
+
+jobs:
+  test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/test-action.yaml

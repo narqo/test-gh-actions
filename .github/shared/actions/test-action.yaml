@@ -1,0 +1,16 @@
+name: test-shared-action
+
+runs:
+  steps:
+    - id: gen-secrets
+      outputs:
+        secrets: ${{ steps.gen-secrets.outputs.secrets }}
+      run: |
+        echo "secrets={\"GITHUB_APP_ID\":\"$(echo -n "secret1,secret2" | base64)\"}" >> "$GITHUB_OUTPUT"
+
+    - id: do-work
+      uses: ./.github/shared/workflows/test-workflow.yaml
+      with:
+        work_dir: BUILD
+      secrets:
+        github_app_id: ${{ fromJSON(steps.gen-secrets.outputs.secrets).GITHUB_APP_ID }}
