@@ -1,4 +1,5 @@
 name: test-shared-action
+description: Test shared action
 
 runs:
   using: composite
@@ -6,6 +7,7 @@ runs:
     - id: gen-secrets
       outputs:
         secrets: ${{ steps.gen-secrets.outputs.secrets }}
+      shell: bash
       run: |
         echo "secrets={\"GITHUB_APP_ID\":\"$(echo -n "secret1,secret2" | base64)\"}" >> "$GITHUB_OUTPUT"
 
