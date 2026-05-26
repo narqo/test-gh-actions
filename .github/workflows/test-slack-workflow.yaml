@@ -5,16 +5,17 @@ on:
 
 permissions:
   id-token: write
+  contents: read
 
 jobs:
   test-job:
     runs-on: self-hosted
     steps:
-      - name: Send Slack notification on failure
+      - name: Send Slack notification
         if: always()
         uses: grafana/shared-workflows/actions/send-slack-message@7b628e7352c2dea057c565cc4fcd5564d5f396c0 # v1.0.0
         with:
-          channel-id: C04AF91LPFX #mimir-ci-notifications
+          channel-id: C04AF91LPFX
           payload: |
             {
               "text": ":sadcomputer: *Automated vendoring of mimir-prometheus into Mimir has failed.*\n<!subteam^S03C2P8659U> please check the <http://spoofed.github.com/grafana/mimir/actions/runs/${{ github.run_id }}|workflow logs> and coordinate fixes for any issues."
